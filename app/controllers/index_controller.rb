@@ -9,7 +9,7 @@ class IndexController < ApplicationController
     if user == 'Student' or user == 'NilClass'
       @orders = Order.paginate(:page=>params[:page],:per_page=>5).where('cur_number != number')
     elsif user == 'Driver'
-      @orders = Order.paginate(:page=>params[:page],:per_page=>5).where("cur_number = number")
+      @orders = Order.paginate(:page=>params[:page],:per_page=>5).where(driver_id: nil).where("cur_number = number")
     elsif user == 'Manager'
       @orders = Order.paginate(:page=>params[:page],:per_page=>5).all
     else
