@@ -58,18 +58,18 @@
         <td>
           <% if get_user_type == 'student'%>
         <div class='btn-group' role='group'>
-            <% if can_join(order) %>
+            <% if current_user.pass and can_join(order) %>
                 <%= link_to 'Join', "/order/#{order.id}/join", method: 'patch', class: 'btn btn-default'%>
             <%end%>
-            <% if can_edit(order) %>
+            <% if current_user.pass and can_edit(order) %>
                 <%= link_to 'Edit', "/order/#{order.id}/edit", method: 'get', class: 'btn btn-default'%>
             <%end%>
-            <% if can_delete(order) %>
+            <% if current_user.pass and can_delete(order) %>
               <%= render partial: 'layouts/modal', 
                 locals: {order: order,button_name: 'Delete', cur_url: "/order/#{order.id}/delete", cur_method: 'delete'}%>
             
             <%end%>
-            <% if can_quit(order) %>
+            <% if current_user.pass and can_quit(order) %>
               <%= render partial: 'layouts/modal', 
                 locals: {order: order,button_name: 'Quit', cur_url: "/order/#{order.id}/quit", cur_method: 'patch'}%>
               

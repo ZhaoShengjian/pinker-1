@@ -3,5 +3,6 @@
 <% if !current_user.nil? and get_user_type != 'manager' and !current_user.pass %>
 <h4>Confirming your Identity, please wait!</h4>
 <% else %>
-<%= render 'layouts/order_list' %>
+
 <%end%>
+<%= render 'layouts/order_list' %>
