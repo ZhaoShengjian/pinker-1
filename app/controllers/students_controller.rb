@@ -34,8 +34,6 @@ class StudentsController < ApplicationController
     @id_card = @user.id_card
   end
   def update
-    #uploadHead(params[:file][:head])
-    #uploadIdCard(params[:file][:id_card])
     @user = Student.find(params[:id])
     @user.update_attribute(:name, params[:student][:name])
     @user.update_attribute(:sex, params[:student][:sex])
