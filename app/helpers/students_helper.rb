@@ -27,21 +27,24 @@ module StudentsHelper
   end
   
   def accepted order
-    !order.driver_id.nil?
+    !order.driver_id.nil? 
   end
   
   def sex_present sex
     if sex == 0
-      'Male'
+      '男'
     else
-      'Female'
+      '女'
     end
   end
   def pass_present pass
     if pass
-      'Validated'
+      '验证已通过'
     else
-      'Validating...'
+      '验证中...'
     end
+  end
+  def can_finished order
+    !order.student_finished and !order.driver_id.nil? and is_creator order
   end
 end

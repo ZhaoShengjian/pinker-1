@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210171128) do
+ActiveRecord::Schema.define(version: 20181222083907) do
 
   create_table "cars", force: :cascade do |t|
     t.string "number"
@@ -52,9 +52,10 @@ ActiveRecord::Schema.define(version: 20181210171128) do
     t.datetime "time"
     t.string "destination"
     t.integer "driver_id"
-    t.boolean "finished"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "driver_finished"
+    t.boolean "student_finished"
   end
 
   create_table "searches", force: :cascade do |t|

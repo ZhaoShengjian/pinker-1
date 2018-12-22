@@ -59,42 +59,53 @@ class DriversController < ApplicationController
   
   def take_order
     @order = Order.find(params[:id])
-    @order.driver_id = current_user.id
-    @order.save
+    @order.update_attribute(:driver_id, current_user.id)
     flash[:success] = 'Success take order!'
     redirect_to root_url
   end
   
-  def taken_order
+  def accept_orders
     @key = Search.new
     @controller = 'drivers'
     @action = 'taken_order'
-    @orders = current_user.orders.where(finished: false).paginate(page: params[:page],per_page: 5)
+    @orders = current_user.orders.where(driver_finished: false).paginate(page: params[:page],per_page: 5)
     @orders = search @orders
     
   end
   
-  def finished_order
+  def finished_orders
     @key = Search.new
     @controller = 'drivers'
     @action = 'finished_order'
-    @orders = current_user.orders.where(finished: true).paginate(page: params[:page],per_page: 5)
+    @orders = current_user.orders.where(driver_finished: true,student_finished:false).paginate(page: params[:page],per_page: 5)
     @orders = search @orders
     
   end
   
+  def history_orders
+    @key = Search.new
+    @controller = 'drivers'
+    @action = 'history_orders'
+    @orders = current_user.orders.where(driver_finished: true,student_finished:true).paginate(page: params[:page],per_page: 5)
+    @orders = search @orders
+  end
   def order_params
     params.require(:order).permit(
       :number, :time, :destination
       )
   end
   
-  
+  def finish_order
+    @order = Order.find(params[:id])
+    @order.update_attribute(:driver_finished,true)
+    flash[:success] = "成功完成！"
+    redirect_to root_url
+  end 
   
   
   def logged_in_user
       unless logged_in?
-        flash[:danger] = "Please log in."
+        flash[:danger] = "请登录！"
         redirect_to login_url
       end
   end

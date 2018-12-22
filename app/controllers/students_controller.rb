@@ -95,7 +95,8 @@ class StudentsController < ApplicationController
   end
   def create_order
     @order = Order.new(order_params)
-    @order.finished = false
+    @order.student_finished = false
+    @order.driver_finished = false
     @order.cur_number = 1
    
     if @order.save
@@ -140,6 +141,12 @@ class StudentsController < ApplicationController
       end
     end
   end
+  def finish_order
+    @order = Order.find(params[:id])
+    @order.update_attribute(:student_finished, true)
+    flash[:success] = '成功完成！'
+    redirect_to root_url
+  end
   def current_orders
     @key = Search.new
     @controller = 'students'
@@ -152,7 +159,7 @@ class StudentsController < ApplicationController
     @key = Search.new
     @controller = 'students'
     @action = 'accept_orders'
-    @orders = current_user.orders.where(driver_id: !nil).paginate(page: params[:page],per_page: 5)
+    @orders = current_user.orders.where(driver_id: !nil,driver_finished:false).paginate(page: params[:page],per_page: 5)
     @orders = search @orders
   end
   
@@ -160,7 +167,7 @@ class StudentsController < ApplicationController
     @key = Search.new
     @controller = 'students'
     @action = 'history'
-    @orders = current_user.orders.where(finished: true).paginate(page: params[:page],per_page: 5)
+    @orders = current_user.orders.where(driver_finished: true,student_finished: true).paginate(page: params[:page],per_page: 5)
     @orders = search @orders
   end 
   

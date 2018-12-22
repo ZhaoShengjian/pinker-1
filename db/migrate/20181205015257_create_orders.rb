@@ -6,9 +6,12 @@ class CreateOrders < ActiveRecord::Migration[5.1]
       t.datetime :time
       t.string :destination
       t.integer :driver_id
-      t.boolean :finished
+      t.boolean :driver_finished
+      t.boolean :student_finished
 
       t.timestamps
     end
+    delete_column :finished
+    add_column :driver_finished, :student_finished
   end
 end

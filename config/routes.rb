@@ -42,8 +42,13 @@ Rails.application.routes.draw do
   
   get '/order/:id/driver', to: 'students#driver_info'
   patch '/order/:id/quit', to: 'students#quit_order'
+  patch '/order/:id/student_finish', to: 'students#finish_order'
   
   patch '/order/:id/take', to: 'drivers#take_order'
+  patch '/order/:id/driver_finish', to: 'drivers#finish_order'
+  get '/driver/:id/accept_orders', to: 'drivers#accept_orders'
+  get '/driver/:id/finished_orders', to: 'drivers#finished_orders'
+  get '/driver/:id/history_orders', to: 'drivers#history_orders'
   
   post '/student/:id/head', to: 'students#update_head'
   post '/student/:id/idcard', to: 'students#update_idcard'

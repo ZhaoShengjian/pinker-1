@@ -1,17 +1,15 @@
 <%= content_for :user_nav do %>
+<% if is_passed %>
 <ul class='nav nav-pills navbar-nav navbar-left '>
-          <li role='presentation'>
-              <a class='dropdown-toggle' data-toggle='dropdown'>
-              Driver Account
-              <span class='caret'></span>
-              </a>
-              <ul class='dropdown-menu'>
-                  <li><%= link_to "Profile", current_user %></li>
-                  <li><%= link_to "Setting", edit_driver_path(current_user) %></li>
-                  <li><%= link_to "To take order", to_take_order_path %></li>
-                  <li><%= link_to "Taken order",  taken_order_path %></li>
-                  <li><%= link_to "Finished order", finished_order_path %></li>
-             </ul>
-             </li>
-            
+  <li class='nav-item' role='presentation'>
+            <%= link_to '已接订单',"/driver/#{current_user.id}/accept_orders" %>
+  </li>
+  <li role='presentation'>
+            <%= link_to '已完成订单',"/driver/#{current_user.id}/finished_orders" %>
+  </li>
+  <li role='presentation'>
+            <%= link_to '历史订单',"/driver/#{current_user.id}/history_orders" %>
+  </li>
+  </ul>
+<% end %>        
 <% end %>

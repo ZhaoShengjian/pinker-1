@@ -59,34 +59,42 @@
           <% if get_user_type == 'student'%>
         <div class='btn-group' role='group'>
             <% if current_user.pass and can_join(order) %>
-                <%= link_to 'Join', "/order/#{order.id}/join", method: 'patch', class: 'btn btn-default'%>
+                <%= link_to '加入', "/order/#{order.id}/join", method: 'patch', class: 'btn btn-default'%>
             <%end%>
             <% if current_user.pass and can_edit(order) %>
-                <%= link_to 'Edit', "/order/#{order.id}/edit", method: 'get', class: 'btn btn-default'%>
+                <%= link_to '修改', "/order/#{order.id}/edit", method: 'get', class: 'btn btn-default'%>
             <%end%>
             <% if current_user.pass and can_delete(order) %>
               <%= render partial: 'layouts/modal', 
-                locals: {order: order,button_name: 'Delete', cur_url: "/order/#{order.id}/delete", cur_method: 'delete'}%>
+                locals: {order: order,button_name: '删除', cur_url: "/order/#{order.id}/delete", cur_method: 'delete'}%>
             
             <%end%>
             <% if current_user.pass and can_quit(order) %>
               <%= render partial: 'layouts/modal', 
-                locals: {order: order,button_name: 'Quit', cur_url: "/order/#{order.id}/quit", cur_method: 'patch'}%>
+                locals: {order: order,button_name: '退出', cur_url: "/order/#{order.id}/quit", cur_method: 'patch'}%>
               
             <% end%>
             <%if accepted order %>
-              <%= link_to 'Driver', "/order/#{order.id}/driver", method: 'get', class: 'btn btn-default'%>
+              <%= link_to '司机', "/order/#{order.id}/driver", method: 'get', class: 'btn btn-default'%>
             <%end%>
+            <% if can_finished order %>
+              <%= render partial: 'layouts/modal', 
+                locals: {order: order,button_name: '完成', cur_url: "/order/#{order.id}/student_finish", cur_method: 'patch'}%>
+              
+            <%end %>
         </div>
 <% elsif get_user_type == 'driver' %>
 
 <div class='btn-group' role='group'>
             <% if can_accept(order) %>
                 <%= render partial: 'layouts/modal', 
-                  locals: {order: order,button_name: 'Take', cur_url: "/order/#{order.id}/take", cur_method: 'patch'}%>
+                  locals: {order: order,button_name: '接单', cur_url: "/order/#{order.id}/take", cur_method: 'patch'}%>
                 
             <%end%>
-            
+            <% if dcan_finished order%>
+            <%= render partial: 'layouts/modal', 
+                  locals: {order: order,button_name: '完成', cur_url: "/order/#{order.id}/driver_finish", cur_method: 'patch'}%>
+            <%end%>
 </div>
 <% elsif get_user_type == 'manager'%>
 
