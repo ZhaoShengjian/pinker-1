@@ -34,30 +34,52 @@ class StudentsController < ApplicationController
     @id_card = @user.id_card
   end
   def update
-    uploadHead(params[:file][:head])
-    uploadIdCard(params[:file][:id_card])
+    #uploadHead(params[:file][:head])
+    #uploadIdCard(params[:file][:id_card])
     @user = Student.find(params[:id])
-    @user.name = params[:user][:name]
-    @user.sex = params[:user][:sex]
-    @user.phone = params[:user][:phone]
+    @user.update_attribute(:name, params[:student][:name])
+    @user.update_attribute(:sex, params[:student][:sex])
+    @user.update_attribute(:phone, params[:student][:phone])
     flash[:success] = 'Success update infomation'
     redirect_to root_url
   end
-  
+  def update_head
+    if params[:file].nil?
+      return 
+    end
+    head = params[:file][:head]
+    path = uploadHead(head)
+    current_user.update_attribute(:head, path)
+    flash[:success] = "Successful upload head"
+    redirect_to root_url
+  end
+  def update_idcard
+    if params[:file].nil?
+      return
+    end
+    idcard = params[:file][:id_card]
+    path =  uploadIdCard(idcard)
+    current_user.update_attribute(:id_card, path)
+    flash[:success] = "Successful upload idcard"
+    redirect_to root_url
+  end
   def uploadHead(head)
     filename = current_user.email + '.' + head.original_filename.split('.')[-1]
-    File.open(Rails.root.join('public', 'student','head', filename), 'wb') do |file|
+    path = Rails.root.join('public',  'upload','student','head', filename)
+    File.open(path, 'wb') do |file|
       file.write head.read
     end
+    "/upload/student/head/"+filename
   end
   def uploadIdCard(head)
     filename = current_user.email + '.' + head.original_filename.split('.')[-1]
-    filepath = Rails.root.join('public', 'student','id_card', filename)
+    filepath = Rails.root.join('public', 'upload','student','id_card', filename)
     current_user.id_card = filepath
     
     File.open(filepath, 'wb') do |file|
       file.write head.read
     end
+    "/upload/student/id_card/"+filename
   end
   def user_params
     params.require(:file).permit(

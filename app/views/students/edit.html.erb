@@ -6,14 +6,15 @@
       <div class='panel-heading'>
         Head
       </div>
-      <div class='panel-body'>
-        <%= link_to image_tag(@head,alt:'head') ,class:'thumbnail'%>
+      <div class='panel-body'  align="center">
+        <%= image_tag(@head,alt:'head',class:'thumbnail') %>
         
       </div>
       <div class='panel-foot'>
-        <%= form_tag({:method =>"post",:controller =>"students",:action=>"update"},:multipart =>true)do %>
+        <%= form_tag({:method =>"post",:controller =>"students",action: "update_head"},:multipart =>true)do %>
           
-          <div class='a-upload'><%= file_field 'file','head'%>Upload</div>
+          <div class='a-upload  btn btn-primary'><%= file_field 'file','head'%>Upload</div>
+          <input type='submit' class='btn btn-primary'>
         <%end%>
       </div>
     </div>
@@ -24,14 +25,15 @@
       <div class='panel-heading'>
         ID Card
       </div>
-      <div class='panel-body'>
-        <%= link_to image_tag(@id_card,alt:'id_card') ,class:'thumbnail'%>
+       <div class='panel-body' align="center">
+        <%= image_tag(@id_card,alt:'id_card',class:'thumbnail') %>
         
       </div>
       <div class='panel-foot'>
-        <%= form_tag({:method =>"post",:controller =>"students",:action=>"update"},:multipart =>true)do %>
+        <%= form_tag({:method =>"post",:controller =>"students",action:"update_idcard"},:multipart =>true)do %>
           
-          <div class='a-upload'><%= file_field "file","id_card"%>Upload</div>
+          <div class='a-upload btn btn-primary'><%= file_field "file","id_card"%>Upload</div>
+          <input type='submit' class='btn btn-primary'>
         <%end%>
         </div>
     </div>
@@ -54,9 +56,9 @@
           <div class='form-group'>
               <%= f.label :sex, "Sex", class: 'control-label col-lg-4' %>
               <div class='col-lg-6'>
-                <label class='radio-inline'><%= radio_button(@user.class.to_s.downcase,'sex',0)%>Male</label>
+                <label class='radio-inline'><%= f.radio_button :sex , 0%>Male</label>
       
-      <label class='radio-inline'><%= radio_button(@user.class.to_s.downcase,'sex',1)%>Female</label>
+      <label class='radio-inline'><%= f.radio_button :sex ,1 %>Female</label>
               </div>
   
           </div>

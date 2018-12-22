@@ -45,6 +45,9 @@ Rails.application.routes.draw do
   
   patch '/order/:id/take', to: 'drivers#take_order'
   
+  post '/student/:id/head', to: 'students#update_head'
+  post '/student/:id/idcard', to: 'students#update_idcard'
+  
   get '/managers/driver_info'
   get '/managers/students_info'
   get '/managers/orders_info'
