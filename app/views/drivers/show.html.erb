@@ -1,33 +1,83 @@
-<%= render "layouts/driver_nav"%>
-<% provide(:title, @user.name) %>
-
+<%= render 'layouts/driver_nav'%>
+<%=provide(:name,'Infomation')%>
 <div class='row'>
-    <aside class = 'col-md-4'>
-        <section class = "user_info">
-            <h1>
-                <%= @user.name %>
-            </h1>
-        </section>
-    </aside>
-</div>
-
-<body>
-    <table class="table table-condensed">
-  <caption>Personal Information</caption>
-  <tbody>
-    <tr>
-      <td>Sex:</td>
-      <td><%= @user.sex %></td>
-     </tr>
-    <tr>
-      <td>Email:</td>
-      <td><%= @user.email %></td>
-      </tr>
-    <tr>
-      <td>Phone:</td>
-      <td><%= @user.phone %></td>
-      </tr>
-  </tbody>
-</table>
+  <div class='col-lg-4'>
+    <div class='panel panel-primary'>
+      <div class='panel-heading'>
+        Head
+      </div>
+      <div class='panel-body'  align="center">
+        <%= image_tag(@head,alt:'head',class:'thumbnail') %>
+        
+      </div>
+      
+    </div>
+    <div class='panel panel-primary'>
+      <div class='panel-heading '>
+        ID Card
+      </div>
+      <div class='panel-body' align="center">
+        <%= image_tag(@id_card,alt:'id_card',class:'thumbnail') %>
+        
+      </div>
+      
+    </div>
     
-</body>
+    <div class='panel panel-primary'>
+      <div class='panel-heading '>
+        License
+      </div>
+      <div class='panel-body' align="center">
+        <%= image_tag(@license,alt:'license',class:'thumbnail') %>
+        
+      </div>
+      
+    </div>
+  
+  </div>
+  <div class='col-lg-8'>
+    <div class='panel panel-primary'>
+      <div class='panel-heading'>
+        Base Information
+      </div>
+     
+      <div class='panel-body'>
+        <ul class='list-group'>
+          
+          <li class='list-group-item'>
+          
+            
+            <div class='row'>
+              <div class='col-lg-2'>Name</div>
+              <div class='col-lg-10'><%= @user.name %></div>
+            </div>
+          </li>
+           <li class='list-group-item'>
+            <div class='row'>
+              <div class='col-lg-2'>Sex</div>
+              <div class='col-lg-10'><%= sex_present @user.sex  %></div>
+            </div>
+          </li>
+          <li class='list-group-item'>
+            <div class='row'>
+              <div class='col-lg-2'>Email</div>
+              <div class='col-lg-10'><%= @user.email  %></div>
+            </div>
+          </li>
+          <li class='list-group-item'>
+            <div class='row'>
+              <div class='col-lg-2'>Phone</div>
+              <div class='col-lg-10'><%=  @user.phone  %></div>
+            </div>
+          </li>
+          <li class='list-group-item'>
+            <div class='row'>
+              <div class='col-lg-2'>Status</div>
+              <div class='col-lg-10'><%= pass_present @user.pass  %></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

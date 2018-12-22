@@ -48,6 +48,10 @@ Rails.application.routes.draw do
   post '/student/:id/head', to: 'students#update_head'
   post '/student/:id/idcard', to: 'students#update_idcard'
   
+  post '/driver/:id/head', to: 'drivers#update_head'
+  post '/driver/:id/idcard', to: 'drivers#update_idcard'
+  post '/driver/:id/carlicense', to: 'drivers#update_carlicense'
+  
   get '/managers/driver_info'
   get '/managers/students_info'
   get '/managers/orders_info'
