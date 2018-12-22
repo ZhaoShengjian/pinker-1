@@ -6,29 +6,99 @@ class DriversController < ApplicationController
   
   def show
     @user = Driver.find(params[:id])
+    @head = @user.head
+    @id_card = @user.id_card
+    @license = @user.license
   end
   def new
     @user = Driver.new
   end
   def edit
-    @user = Driver.find(params[:id])
+    @user = Driver.find(current_user.id)
+    @head = @user.head
+    @id_card = @user.id_card
+    @license = @user.license
   end
   
   def update
     @user = Driver.find(params[:id])
-    if @user.update_attributes(driver_params)
-      flash[:success] = "Profile updated"
-      redirect_to @user
-      else
-      render 'edit'
-    end
+    @user.update_attribute(:name, params[:driver][:name])
+    @user.update_attribute(:sex, params[:driver][:sex])
+    @user.update_attribute(:phone, params[:driver][:phone])
+    flash[:success] = 'Success update infomation'
+    redirect_to root_url
   end
+  
+  def update_head
+    if params[:file].nil?
+      return 
+    end
+    head = params[:file][:head]
+    path = uploadHead(head)
+    current_user.update_attribute(:head, path)
+    flash[:success] = "Successful upload head"
+    redirect_to root_url
+  end
+  
+  def update_idcard
+    if params[:file].nil?
+      return
+    end
+    idcard = params[:file][:id_card]
+    path =  uploadIdCard(idcard)
+    current_user.update_attribute(:id_card, path)
+    flash[:success] = "Successful upload idcard"
+    redirect_to root_url
+  end
+  
+  def update_carlicense
+    if params[:file].nil?
+      return
+    end
+    carlicense = params[:file][:license]
+    path = uploadLicense(carlicense)
+    current_user.update_attribute(:license,path)
+    flash[:success] = "Successful upload license"
+    redirect_to root_url
+  end
+  
+  def uploadHead(head)
+    filename = current_user.email + '.' + head.original_filename.split('.')[-1]
+    path = Rails.root.join('public',  'upload','driver','head', filename)
+    File.open(path, 'wb') do |file|
+      file.write head.read
+    end
+    "/upload/driver/head/"+filename
+  end
+  
+  def uploadIdCard(head)
+    filename = current_user.email + '.' + head.original_filename.split('.')[-1]
+    filepath = Rails.root.join('public', 'upload','driver','id_card', filename)
+    current_user.id_card = filepath
+    
+    File.open(filepath, 'wb') do |file|
+      file.write head.read
+    end
+    "/upload/driver/id_card/"+filename
+  end
+  
+  def uploadLicense(head)
+    filename = current_user.email + '.' + head.original_filename.split('.')[-1]
+    filepath = Rails.root.join('public', 'upload','driver','license', filename)
+    current_user.license = filepath
+    
+    File.open(filepath, 'wb') do |file|
+      file.write head.read
+    end
+    "/upload/driver/license/"+filename
+  end
+  
   def create
     @user = Driver.new(driver_params)
-    @user.pass = false
-    @user.id_card = @@driver_id_card_default
-    @user.license = @@driver_license_default
-    @user.head = @@driver_head_default
+    @user[:pass] = false
+    @user[:id_card] = @@driver_id_card_default
+    @user[:license] = @@driver_license_default
+    @user[:head] = @@driver_head_default
     if @user.save
       flash[:success] = "Success Sign up!"
       log_in @user
@@ -39,22 +109,9 @@ class DriversController < ApplicationController
     end
   end
   
-
-  
   def driver_params
     params.require(:driver).permit(:name,:sex,:phone,:password,
       :email,:password_confirmation,:bond)
-  end
-    
-  def upload
-    uploadFile(params[:file][:filedata])
-  end
-  
-  def uploadFile(file)
-    @filename = 'a.png'
-    File.open("#{Rails.root}/assets/images/#{@filename}", "wb") do |f|
-        f.write(file.read)# 向dir目录写入文件
-      end
   end
   
   def take_order
