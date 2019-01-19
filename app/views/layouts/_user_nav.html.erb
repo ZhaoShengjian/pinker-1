@@ -4,7 +4,8 @@
 <%= render "layouts/student_nav" %>
 <% elsif current_user.class.to_s == 'Driver' %>
 <%= render "layouts/driver_nav" %>
-<% else %>
+<% elsif current_user.class.to_s == 'Manager' %>
 <%= render "layouts/manager_nav" %>
+<% else%>
 <%end%>
 <% end %>

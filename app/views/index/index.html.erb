@@ -1,7 +1,7 @@
 <%= render 'layouts/user_nav' %>
-<%= provide(:name, 'Pinker')%>
+<%= provide(:name, '拼客')%>
 <% if !current_user.nil? and get_user_type != 'manager' and !current_user.pass %>
-<h4>Confirming your Identity, please wait!</h4>
+<h4>验证身份中，请等待...</h4>
 <% else %>
 
 <%end%>

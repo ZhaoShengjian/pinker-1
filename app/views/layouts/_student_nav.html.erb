@@ -2,16 +2,16 @@
 <% if is_passed %>
 <ul class='nav nav-pills navbar-nav navbar-left '>
           <li class='nav-item' role='presentation'>
-            <%= link_to 'Create Orders', controller: 'students', action: 'new_order'%>
+            <%= link_to '创建订单', controller: 'students', action: 'new_order'%>
           </li>
           <li class='nav-item' role='presentation'>
-            <%= link_to 'Current Orders',"/student/#{current_user.id}/orders" %>
+            <%= link_to '当前订单',"/student/#{current_user.id}/orders" %>
           </li>
           <li role='presentation'>
-            <%= link_to 'Accepted Orders',"/student/#{current_user.id}/accept_orders" %>
+            <%= link_to '被接订单',"/student/#{current_user.id}/accept_orders" %>
           </li>
           <li role='presentation'>
-            <%= link_to 'History',"/student/#{current_user.id}/history" %>
+            <%= link_to '历史订单',"/student/#{current_user.id}/history" %>
           </li>
         </ul>
 <% end %>

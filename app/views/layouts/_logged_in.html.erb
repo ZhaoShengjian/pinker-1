@@ -6,13 +6,13 @@
               </a>
               <ul class='dropdown-menu'>
                 <li>
-                  <%= link_to 'Information', current_user%>
-                <li><%= link_to 'Settings', edit_student_path(current_user) %></li>
+                  <%= link_to '个人信息', current_user%>
+                <li><%= link_to '设置', user_edit_url %></li>
               </ul>
            
           </li>
           <li>
-            <%= link_to 'Log out', logout_path, method:'delete'%>
+            <%= link_to '登出', logout_path, method:'delete'%>
             
           </li>
         </ul>

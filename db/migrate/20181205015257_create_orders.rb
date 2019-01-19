@@ -11,7 +11,5 @@ class CreateOrders < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    delete_column :finished
-    add_column :driver_finished, :student_finished
   end
 end

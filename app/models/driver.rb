@@ -10,7 +10,7 @@ class Driver < ApplicationRecord
   validates :password, presence:true, length: { minimum: 6 }
   
   
-  has_many :cars
+  has_one :car
   has_many :orders
   
   has_secure_password

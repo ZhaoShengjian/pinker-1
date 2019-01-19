@@ -21,17 +21,9 @@ driver3 = Driver.create(
   license:'drivers/license/driver3@example.com.png', bond:0.0, head:'drivers/head/driver3@example.com.png',
   email:'driver3@example.com',password:'123456',pass:false
   )
-
-car1 = Car.create(
-  number:"j12341", person_number:4,picture:'cars/j12341.png',driver_id: driver1.id
-  )
-car2 = Car.create(
-  number:"j12342", person_number:4,picture:'cars/j12342.png',driver_id: driver2.id
-  )
-car3 = Car.create(
-  number:"j12343", person_number:4,picture:'cars/j12343.png',driver_id: driver3.id
-  )
-  
+Car.create(number: "xxxxxx",person_number: 0, driver_id: driver1.id, picture: "cars/example.png")
+Car.create(number: "xxxxxx",person_number: 0, driver_id: driver2.id, picture: "cars/example.png")
+Car.create(number: "xxxxxx",person_number: 0, driver_id: driver3.id, picture: "cars/example.png")
 s1 = Student.create(
   name:'s1',sex:1,phone:'15002969736',id_card:'students/id_card/s1@example.com.png',
   email:'s1@example.com',password:'123456',pass:false, head: 'students/head/s1@example.com.png'

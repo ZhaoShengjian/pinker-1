@@ -9,6 +9,7 @@ class DriversController < ApplicationController
     @head = @user.head
     @id_card = @user.id_card
     @license = @user.license
+    @car = @user.car
   end
   def new
     @user = Driver.new
@@ -18,6 +19,7 @@ class DriversController < ApplicationController
     @head = @user.head
     @id_card = @user.id_card
     @license = @user.license
+    @car = @user.car
   end
   
   def update
@@ -25,10 +27,17 @@ class DriversController < ApplicationController
     @user.update_attribute(:name, params[:driver][:name])
     @user.update_attribute(:sex, params[:driver][:sex])
     @user.update_attribute(:phone, params[:driver][:phone])
-    flash[:success] = 'Success update infomation'
+    Car.create(number: "xxxxxx",person_number: 0, driver_id:@user.id, picture: "cars/example.png")
+    flash[:success] = '成功更新个人信息'
     redirect_to root_url
   end
-  
+  def update_carinfo
+    @user = Driver.find(params[:id])
+    @user.car.update_attribute(:number, params[:car][:number])
+    @user.car.update_attribute(:person_number, params[:car][:person_number])
+    flash[:success] = '成功更新车辆信息'
+    redirect_to root_url
+  end
   def update_head
     if params[:file].nil?
       return 
@@ -36,7 +45,7 @@ class DriversController < ApplicationController
     head = params[:file][:head]
     path = uploadHead(head)
     current_user.update_attribute(:head, path)
-    flash[:success] = "Successful upload head"
+    flash[:success] = "成功上传头像"
     redirect_to root_url
   end
   
@@ -47,7 +56,7 @@ class DriversController < ApplicationController
     idcard = params[:file][:id_card]
     path =  uploadIdCard(idcard)
     current_user.update_attribute(:id_card, path)
-    flash[:success] = "Successful upload idcard"
+    flash[:success] = "成功上传身份证"
     redirect_to root_url
   end
   
@@ -58,7 +67,17 @@ class DriversController < ApplicationController
     carlicense = params[:file][:license]
     path = uploadLicense(carlicense)
     current_user.update_attribute(:license,path)
-    flash[:success] = "Successful upload license"
+    flash[:success] = "成功上传驾照"
+    redirect_to root_url
+  end
+  def update_carpicture
+    if params[:file].nil?
+      return
+    end
+    carpicture = params[:file][:carpicture]
+    path = uploadCarPicture(carpicture)
+    current_user.car.update_attribute(:picture,path)
+    flash[:success] = "成功上传车辆图片"
     redirect_to root_url
   end
   
@@ -74,7 +93,6 @@ class DriversController < ApplicationController
   def uploadIdCard(head)
     filename = current_user.email + '.' + head.original_filename.split('.')[-1]
     filepath = Rails.root.join('public', 'upload','driver','id_card', filename)
-    current_user.id_card = filepath
     
     File.open(filepath, 'wb') do |file|
       file.write head.read
@@ -85,7 +103,6 @@ class DriversController < ApplicationController
   def uploadLicense(head)
     filename = current_user.email + '.' + head.original_filename.split('.')[-1]
     filepath = Rails.root.join('public', 'upload','driver','license', filename)
-    current_user.license = filepath
     
     File.open(filepath, 'wb') do |file|
       file.write head.read
@@ -93,14 +110,34 @@ class DriversController < ApplicationController
     "/upload/driver/license/"+filename
   end
   
+  def uploadCarPicture(head)
+    filename = current_user.email + '.' + head.original_filename.split('.')[-1]
+    filepath = Rails.root.join('public', 'upload','driver','car', filename)
+
+    
+    File.open(filepath, 'wb') do |file|
+      file.write head.read
+    end
+    "/upload/driver/car/"+filename
+  end
+  
   def create
-    @user = Driver.new(driver_params)
+    param = driver_params
+    
+    @user = Driver.new(param)
+    if !check_email_only(param[:email])
+      flash[:danger] = "该邮箱已注册"
+      redirect_to action: 'new'
+      return 
+    end
     @user[:pass] = false
     @user[:id_card] = @@driver_id_card_default
     @user[:license] = @@driver_license_default
     @user[:head] = @@driver_head_default
+    
     if @user.save
-      flash[:success] = "Success Sign up!"
+      Car.create(number: "xxxxxx",person_number: 0, driver_id: @user.id, picture: "cars/example.png")
+      flash[:success] = "成功注册"
       log_in @user
       redirect_to root_url
     else
@@ -117,12 +154,13 @@ class DriversController < ApplicationController
   def take_order
     @order = Order.find(params[:id])
     @order.update_attribute(:driver_id, current_user.id)
-    flash[:success] = 'Success take order!'
+    flash[:success] = '成功接单'
     redirect_to root_url
   end
   
   def accept_orders
     @key = Search.new
+     @content = NlpSearch.new
     @controller = 'drivers'
     @action = 'taken_order'
     @orders = current_user.orders.where(driver_finished: false).paginate(page: params[:page],per_page: 5)
@@ -132,6 +170,7 @@ class DriversController < ApplicationController
   
   def finished_orders
     @key = Search.new
+     @content = NlpSearch.new
     @controller = 'drivers'
     @action = 'finished_order'
     @orders = current_user.orders.where(driver_finished: true,student_finished:false).paginate(page: params[:page],per_page: 5)
@@ -141,6 +180,7 @@ class DriversController < ApplicationController
   
   def history_orders
     @key = Search.new
+     @content = NlpSearch.new
     @controller = 'drivers'
     @action = 'history_orders'
     @orders = current_user.orders.where(driver_finished: true,student_finished:true).paginate(page: params[:page],per_page: 5)
@@ -172,5 +212,15 @@ class DriversController < ApplicationController
       redirect_to(root_url) unless @user == current_user
   end
   
+  def student_info
+    sos = StudentOrder.where(order_id: params[:id], is_creator: true).first
+    if sos.nil?
+      flash[:danger] = "找不到该用户"
+      redirect_to root_url
+      return
+    end
+    @user = Student.find(sos.student_id)
+    
+  end
   
 end
