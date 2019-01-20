@@ -11,8 +11,7 @@ Rails.application.routes.draw do
 
 
   post '/upload', to: 'drivers#upload'
-  get '/show', to: 'drivers#show'
-  get '/edit', to: 'drivers#edit'
+
   
   get '/to_take_order', to: 'drivers#to_take_order'
   get '/taken_order', to: 'drivers#taken_order'
