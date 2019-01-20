@@ -1,18 +1,22 @@
             <ul class='nav navbar-nav navbar-right'>
           <li role='presentation'>
-            <a class='dropdown-toggle' data-toggle='dropdown'>
+	<% if current_user.class.to_s != 'Manager' %>           
+ <a class='dropdown-toggle' data-toggle='dropdown'>
               <%= current_user.name %>
+		
               <span class='caret'></span>
               </a>
               <ul class='dropdown-menu'>
                 <li>
-                  <%= link_to 'Information', current_user%>
-                <li><%= link_to 'Settings', edit_student_path(current_user) %></li>
+                  <%= link_to '个人信息', current_user%>
+                <li><%= link_to '设置', user_edit_url %></li>
               </ul>
-           
+<% else %>
+<%= link_to  current_user.name, '#', method: 'get' %>
+           <%end%>
           </li>
           <li>
-            <%= link_to 'Log out', logout_path, method:'delete'%>
+            <%= link_to '登出', logout_path, method:'delete'%>
             
           </li>
         </ul>

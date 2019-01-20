@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
       log_in(manager)
       redirect_to root_url
     else
-      flash[:danger] = 'Invalid email/password combination'
+      flash[:danger] = '邮箱或密码错误'
       redirect_to root_url
     end
     

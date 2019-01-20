@@ -9,6 +9,8 @@ end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.6'
 gem 'bootstrap-sass'
+gem 'faraday'
+gem 'json'
 #gem 'momentjs-rails', '>= 2.9.0'
 #gem 'bootstrap3-datetimepicker-rails', '~> 4.17.47'
 # Use sqlite3 as the database for Active Record

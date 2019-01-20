@@ -1,10 +1,10 @@
 <%= render 'layouts/driver_nav'%>
-<%=provide(:name,'Infomation')%>
+<%=provide(:name,'修改信息')%>
 <div class='row'>
   <div class='col-lg-4'>
     <div class='panel panel-primary'>
       <div class='panel-heading'>
-        Head
+        头像
       </div>
       <div class='panel-body'  align="center">
         <%= image_tag(@head,alt:'head',class:'thumbnail') %>
@@ -13,7 +13,7 @@
       <div class='panel-foot'>
         <%= form_tag({:method =>"post",:controller =>"drivers",action: "update_head"},:multipart =>true)do %>
           
-          <div class='a-upload  btn btn-primary'><%= file_field 'file','head'%>Upload</div>
+          <div class='a-upload  btn btn-primary'><%= file_field 'file','head'%>上传</div>
           <input type='submit' class='btn btn-primary'>
         <%end%>
       </div>
@@ -23,7 +23,7 @@
 
     <div class='panel panel-primary'>
       <div class='panel-heading'>
-        ID Card
+        身份证
       </div>
        <div class='panel-body' align="center">
         <%= image_tag(@id_card,alt:'id_card',class:'thumbnail') %>
@@ -32,7 +32,7 @@
       <div class='panel-foot'>
         <%= form_tag({:method =>"post",:controller =>"drivers",action:"update_idcard"},:multipart =>true)do %>
           
-          <div class='a-upload btn btn-primary'><%= file_field "file","id_card"%>Upload</div>
+          <div class='a-upload btn btn-primary'><%= file_field "file","id_card"%>上传</div>
           <input type='submit' class='btn btn-primary'>
         <%end%>
         </div>
@@ -40,7 +40,7 @@
     
     <div class='panel panel-primary'>
       <div class='panel-heading'>
-        License
+        驾照
       </div>
        <div class='panel-body' align="center">
         <%= image_tag(@license,alt:'license',class:'thumbnail') %>
@@ -49,7 +49,7 @@
       <div class='panel-foot'>
         <%= form_tag({:method =>"post",:controller =>"drivers",action:"update_carlicense"},:multipart =>true)do %>
           
-          <div class='a-upload btn btn-primary'><%= file_field "file","license"%>Upload</div>
+          <div class='a-upload btn btn-primary'><%= file_field "file","license"%>上传</div>
           <input type='submit' class='btn btn-primary'>
         <%end%>
         </div>
@@ -59,29 +59,29 @@
   <div class='col-lg-8'>
     <div class='panel panel-primary'>
       <div class='panel-heading'>
-        Base Information
+       基本信息
       </div>
      
       <div class='panel-body'>
          <%= form_for(@user, url: {controller: 'drivers', action:'update'},html: {class: "form-horizontal"}) do |f|%>
           <div class='form-group'>
-              <%= f.label :name, "Name", class: 'control-label col-lg-4' %>
+              <%= f.label :name, "姓名", class: 'control-label col-lg-4' %>
               <div class='col-lg-6'>
                 <%= f.text_field :name, class:"form-control"%>
               </div>
   
           </div>
           <div class='form-group'>
-              <%= f.label :sex, "Sex", class: 'control-label col-lg-4' %>
+              <%= f.label :sex, "性别", class: 'control-label col-lg-4' %>
               <div class='col-lg-6'>
-                <label class='radio-inline'><%= f.radio_button :sex , 0%>Male</label>
+                <label class='radio-inline'><%= f.radio_button :sex , 0%>男</label>
       
-      <label class='radio-inline'><%= f.radio_button :sex ,1 %>Female</label>
+      <label class='radio-inline'><%= f.radio_button :sex ,1 %>女</label>
               </div>
   
           </div>
           <div class='form-group'>
-              <%= f.label :phone, "Phone", class: 'control-label col-lg-4' %>
+              <%= f.label :phone, "手机号", class: 'control-label col-lg-4' %>
               <div class='col-lg-6'>
                 <%= f.text_field :phone, class:"form-control"%>
               </div>
@@ -89,7 +89,7 @@
           </div>
           
           <div class='col-lg-4 col-lg-offset-5'>
-  <%= f.submit "Submit", class: "btn btn-primary" %>
+  <%= f.submit "提交", class: "btn btn-primary" %>
 </div>
           <%end%>
         
@@ -98,6 +98,58 @@
         
         
       </div>
+    </div>
+        <div class='panel panel-primary'>
+      <div class='panel-heading'>
+        车辆
+      </div>
+      <div class='panel-body'>
+        <div class='row>'>
+          <div class='col-lg-4'>
+            <%= image_tag(@car.picture,alt:'car_picture',class:'thumbnail') %>
+                  
+        <%= form_tag({:method =>"post",:controller =>"drivers",action:"update_carpicture"},:multipart =>true)do %>
+          
+          <div class='a-upload btn btn-primary'><%= file_field "file","carpicture"%>上传</div>
+          <input type='submit' class='btn btn-primary'>
+        <%end%>
+      
+          </div>
+          <div class='col-lg-8'>
+            <%= form_for(@car, url: {controller: 'drivers', action:'update_carinfo'},html: {class: "form-horizontal"}) do |f|%>
+            <ul class='list-group'>
+              <li class='list-group-item'>
+            <div class='form-group'>
+              <%= f.label :number, "车牌号", class: 'control-label col-lg-4' %>
+              <div class='col-lg-6'>
+                
+                <%= f.text_field :number, class:"form-control"%>
+              </div>
+              </div>
+
+
+              </li>
+              <li class='list-group-item'>
+                
+                <div class='form-group'>
+              <%= f.label :person_number, "核载人数", class: 'control-label col-lg-4' %>
+              <div class='col-lg-6'>
+                
+                <%= f.text_field :person_number, class:"form-control"%>
+              </div>
+              </div>
+
+              </li>
+              
+            </ul>
+            <div class='col-lg-4 col-lg-offset-5'>
+  <%= f.submit "提交", class: "btn btn-primary" %>
+</div>
+            <%end%>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 </div>

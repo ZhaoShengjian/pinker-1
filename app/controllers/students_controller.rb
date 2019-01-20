@@ -8,12 +8,19 @@ class StudentsController < ApplicationController
     @user = Student.new
   end
   def create
-    @user = Student.new(student_params)
+    param = student_params
+    pp check_email_only(param[:email])
+    if !check_email_only(param[:email])
+      flash[:danger] = "该邮箱已注册"
+      redirect_to action: 'new'
+      return 
+    end
+    @user = Student.new(param)
     @user[:pass] =false
     @user[:id_card] = @@student_id_card_default
     @user[:head] = @@student_head_default
     if @user.save
-      flash[:success] = "Success Sign up!"
+      flash[:success] = "成功注册"
       log_in @user
       redirect_to root_url
     else
@@ -38,7 +45,7 @@ class StudentsController < ApplicationController
     @user.update_attribute(:name, params[:student][:name])
     @user.update_attribute(:sex, params[:student][:sex])
     @user.update_attribute(:phone, params[:student][:phone])
-    flash[:success] = 'Success update infomation'
+    flash[:success] = '成功修改信息'
     redirect_to root_url
   end
   def update_head
@@ -48,7 +55,7 @@ class StudentsController < ApplicationController
     head = params[:file][:head]
     path = uploadHead(head)
     current_user.update_attribute(:head, path)
-    flash[:success] = "Successful upload head"
+    flash[:success] = "成功上传头像"
     redirect_to root_url
   end
   def update_idcard
@@ -58,7 +65,7 @@ class StudentsController < ApplicationController
     idcard = params[:file][:id_card]
     path =  uploadIdCard(idcard)
     current_user.update_attribute(:id_card, path)
-    flash[:success] = "Successful upload idcard"
+    flash[:success] = "成功上传身份证"
     redirect_to root_url
   end
   def uploadHead(head)
@@ -92,19 +99,22 @@ class StudentsController < ApplicationController
     
   end
   def create_order
+    para = order_params
+    if para[:time] < Time.now
+      flash[:danger] = "时间不正确"
+      redirect_to root_url
+      return
+    end
     @order = Order.new(order_params)
     @order.student_finished = false
     @order.driver_finished = false
     @order.cur_number = 1
    
     if @order.save
-      flash[:success] = "Success create order!"
-      so = StudentOrder.new(student_id: current_user
-      .id, order_id:@order.id, bond:100.0, is_creator:true)
-       so.save
+      flash[:success] = "成功创建订单"
+      so = StudentOrder.new(student_id: current_user.id, order_id:@order.id, bond:100.0, is_creator:true)
+      so.save
       redirect_to root_url
-     
-      
     else
       flash[:danger] = @order.errors.full_messages.first
       redirect_to action: 'new_order'
@@ -122,7 +132,7 @@ class StudentsController < ApplicationController
     if !order.nil?
       res = StudentOrder.find_by(order_id: order.id, student_id: current_user.id)
       if !res.nil?
-        flash[:danger] = "Can't join this order!"
+        flash[:danger] = "不能加入该订单"
         redirect_to root_url
         return
       end
@@ -131,10 +141,10 @@ class StudentsController < ApplicationController
         StudentOrder.create(student_id: current_user
         .id, order_id: order.id, bond:100.0, is_creator:false)
         order.save
-        flash[:success] = "Success Join!"
+        flash[:success] = "加入成功"
         redirect_to root_url
       else
-        flash[:danger] = "Can't join this order!"
+        flash[:danger] = "不能加入该订单"
         redirect_to root_url
       end
     end
@@ -149,12 +159,14 @@ class StudentsController < ApplicationController
     @key = Search.new
     @controller = 'students'
     @action = 'current_orders'
+    @content = NlpSearch.new
     @orders = current_user.orders.where(driver_id: nil).paginate(page: params[:page],per_page: 5)
     @orders = search @orders
   end
   
   def accept_orders
     @key = Search.new
+    @content = NlpSearch.new
     @controller = 'students'
     @action = 'accept_orders'
     @orders = current_user.orders.where(driver_id: !nil,driver_finished:false).paginate(page: params[:page],per_page: 5)
@@ -163,6 +175,7 @@ class StudentsController < ApplicationController
   
   def history
     @key = Search.new
+    @content = NlpSearch.new
     @controller = 'students'
     @action = 'history'
     @orders = current_user.orders.where(driver_finished: true,student_finished: true).paginate(page: params[:page],per_page: 5)
@@ -177,7 +190,7 @@ class StudentsController < ApplicationController
     @order = Order.find(params[:id])
     @order.number = params[:order][:number]
     @order.save
-    flash[:success] = "Success update order!"
+    flash[:success] = "成功修改订单"
     redirect_to root_url
   end
   
@@ -185,7 +198,7 @@ class StudentsController < ApplicationController
     @order = Order.find(params[:id])
     StudentOrder.find_by(student_id: current_user.id, order_id: @order.id).delete
     @order.delete
-    flash[:success] = 'Success Delete order!'
+    flash[:success] = '成功删除订单'
     redirect_to root_url
   end
   
@@ -205,20 +218,24 @@ class StudentsController < ApplicationController
         @order.cur_number -= 1
         @order.save
       end
-      flash[:success] = 'Success quit!'
+      flash[:success] = '成功退出订单'
       redirect_to root_url
     else
       @order.cur_number -= 1
       so.delete
       @order.save
-      flash[:success] = 'Success quit!'
+      flash[:success] = '成功退出订单'
       redirect_to root_url
     end
   end
   def driver_info
-    @order = Order.find(params[:id])
-    @driver = Driver.find(@order.driver_id)
-    {name: @driver.name, phone: @driver.phone, cars: @driver.cars, head: @driver.head}
+    order = Order.find(params[:id])
+    @user = Driver.find(order.driver_id)
+    @car = @user.car
+    @head = @user.head
+    @id_card = @user.id_card
+    @license = @user.license
+    
   end
     
 end

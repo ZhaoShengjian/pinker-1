@@ -7,7 +7,7 @@
           
           <div class='input-group col-lg-12'>
             <div class="input-group date form_datetime"  data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                    <span class="input-group-addon">Time</span>
+                    <span class="input-group-addon">时间</span>
                     <%= f.text_field :time, class:'form-control', readonly: true%>
                     
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -21,29 +21,43 @@
         <div class='form-group'>
     
     <div class='input-group col-lg-12'>
-      <span class='input-group-addon'>Destination</span>
+      <span class='input-group-addon'>目的地</span>
       <%= f.text_field :destination, class:"form-control"%>
     </div>
     
 </div>
-      <%= f.submit "Search", class: "btn btn-primary" %>
+      <%= f.submit "搜索", class: "btn btn-primary" %>
     </div>
   
   
 
   <%end%>
+  
+</div>
+<div class='row'>
+  <%= form_for(@content,url:{controller: "#{@controller}",action: "#{@action}"}, method:'get',html: {class: "form-inline"}) do |f|%>
+    <div class='row' >
+      <div class='form-group'>
+        <div class='input-group'>
+          <span class='input-group-addon'>内容</span>
+          <%= f.text_field :content, class:"form-control", size: "69"%>
+        </div>
+        <%= f.submit "搜索", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
 </div>
 <div class='row'>
 <table class='table'>
   <thead>
     <tr class='text-center'>
-      <th class='text-center'>No</th>
-      <th class='text-center'>Number</th>
-      <th class='text-center'>Current Number</th>
-      <th class='text-center'> Time</th>
-      <th class='text-center'>Destination</th>
+      <th class='text-center'>序号</th>
+      <th class='text-center'>目标人数</th>
+      <th class='text-center'>当前人数</th>
+      <th class='text-center'>时间</th>
+      <th class='text-center'>目的地</th>
       <% if logged_in? %>
-      <th class='text-center'>Operations</th>
+      <th class='text-center'>操作</th>
       <%end%>
     </tr>
   </thead>
@@ -86,15 +100,19 @@
 <% elsif get_user_type == 'driver' %>
 
 <div class='btn-group' role='group'>
-            <% if can_accept(order) %>
+            <% if is_passed and can_accept(order) %>
                 <%= render partial: 'layouts/modal', 
                   locals: {order: order,button_name: '接单', cur_url: "/order/#{order.id}/take", cur_method: 'patch'}%>
                 
             <%end%>
-            <% if dcan_finished order%>
+            <% if is_passed and dcan_finished order%>
             <%= render partial: 'layouts/modal', 
                   locals: {order: order,button_name: '完成', cur_url: "/order/#{order.id}/driver_finish", cur_method: 'patch'}%>
             <%end%>
+            <% if is_passed %>
+            <%= link_to '学生', "/driver/#{order.id}/student_info", method: 'get', class: 'btn btn-default'%>
+            
+            <% end %>
 </div>
 <% elsif get_user_type == 'manager'%>
 

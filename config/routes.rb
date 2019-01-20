@@ -56,10 +56,21 @@ Rails.application.routes.draw do
   post '/driver/:id/head', to: 'drivers#update_head'
   post '/driver/:id/idcard', to: 'drivers#update_idcard'
   post '/driver/:id/carlicense', to: 'drivers#update_carlicense'
-  
+  post '/driver/:id/carpicture', to: 'drivers#update_carpicture'
+  patch '/driver/:id/carinfo', to: 'drivers#update_carinfo'
+  get '/driver/:id/student_info', to: 'drivers#student_info'
   get '/managers/driver_info'
   get '/managers/students_info'
   get '/managers/orders_info'
+  
+  get '/manager/:id/validate_driver', to: 'managers#validate_driver'
+  get 'manager/:id/validate_student', to: 'managers#validate_student'
+  
+  get '/manager/driver/:id/pictures', to: 'managers#driver_pictures'
+  post '/manager/driver/:id/pass', to: 'managers#driver_pass'
+  get '/manager/student/:id/pictures', to: 'managers#student_pictures'
+  post '/manager/student/:id/pass', to: 'managers#student_pass'
+  
 
   resources :drivers
   resources :students
